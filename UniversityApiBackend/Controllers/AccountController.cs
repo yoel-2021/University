@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApiBackend.DataAccess;
 using UniversityApiBackend.Helpers;
 using UniversityApiBackend.Models.DataModels;
 
@@ -13,26 +14,34 @@ namespace UniversityApiBackend.Controllers
     {
         private readonly JwtSettings _jwtSettings;
 
-        public AccountController(JwtSettings jwtSettings)
+        public AccountController(UniversityDBContext context, JwtSettings jwtSettings)
         {
+            _context = context;
             _jwtSettings = jwtSettings;
+
         }
-        private IEnumerable<User> Logins = new List<User>()
+
+        //
+        //TODO  Change by real user DB
+
+        private readonly UniversityDBContext _context;
+         private IEnumerable<User> Logins = new List<User>()
         {
-            new User()
-            {
-                Id = 1,
-                Email= "martin@imaginagroup",
-                Name= "Admin",
-                Password= "Admin"
-            },
-             new User()
-            {
-                Id = 2,
-                Email= "pepe@imaginagroup",
-                Name= "User 1",
-                Password= "pepe"
-            }
+        
+         new User()
+        {
+            Id = 1,
+            Email= "martin@imaginagroup",
+            Name= "Admin",
+            Password= "Admin"
+        },
+        new User()
+         {
+            Id = 2,
+            Email= "pepe@imaginagroup",
+            Name= "User 1",
+            Password= "pepe"
+        }
         };
         [HttpPost]
         public IActionResult GetToken (UserLogins userlogins)

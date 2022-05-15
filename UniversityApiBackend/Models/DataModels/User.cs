@@ -23,6 +23,8 @@ namespace UniversityApiBackend.Models.DataModels
         [Required]
         public string Password { get; set; } = string.Empty;
 
+        [Required]
+        public bool IsAdministrator { get; set; } = false;
     }
 }
 
