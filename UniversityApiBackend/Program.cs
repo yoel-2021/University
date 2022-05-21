@@ -7,6 +7,8 @@ using UniversityApiBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//1.Internalization /LOCALIZATION 
+builder.Services.AddLocalization(options => options.ResourcesPath = "ResourcesUniversity");
 //2. Connection with SQL Server Express
 
 const string CONNECTIONNAME = "UniversityDb";
@@ -84,6 +86,17 @@ builder.Services.AddCors(options =>
 
 //
 var app = builder.Build();
+
+
+//2. Internalization/ SUPPORTED CULTURES
+var supportedCultures = new[] { "en-US", "es-ES", "de-DE" };//USA ENGLISH, SPAIN SPANISH AND German Germany
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])  // english by default
+    .AddSupportedCultures(supportedCultures) // add all supported cultures
+    .AddSupportedUICultures(supportedCultures);// add supported cultures to UI
+
+//3. Internalization ADD LOCALIZATION to APP
+app.UseRequestLocalization(localizationOptions);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

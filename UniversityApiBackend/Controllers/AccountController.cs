@@ -49,16 +49,28 @@ namespace UniversityApiBackend.Controllers
             try
             {
                 var Token = new UserTokens();
-                var Valid = Logins.Any(user => user.Name.Equals(userlogins.UserName, StringComparison.OrdinalIgnoreCase));
-            if (Valid)
+
+
+                //Search a user in context with LinQ
+
+                var searchUser = (from user in _context.Users
+                                  where user.Name == userlogins.UserName && user.Password == userlogins.Password
+                                  select user).FirstOrDefault();
+
+                Console.WriteLine("User found", searchUser);
+
+
+                //var Valid = Logins.Any(user => user.Name.Equals(userlogins.UserName, StringComparison.OrdinalIgnoreCase));
+            
+                if (searchUser != null)
                 {
-                    var user= Logins.FirstOrDefault(user =>user.Name.Equals(userlogins.UserName, StringComparison.OrdinalIgnoreCase));
+                   // var user= Logins.FirstOrDefault(user =>user.Name.Equals(userlogins.UserName, StringComparison.OrdinalIgnoreCase));
 
                     Token = JwtHelpers.GenTokenKey(new UserTokens()
                     {
-                        UserName = user.Name,
-                        EmailId = user.Email,
-                        Id = user.Id,
+                        UserName = searchUser.Name,
+                        EmailId = searchUser.Email,
+                        Id = searchUser.Id,
                         GuidId = Guid.NewGuid(),
                     }, _jwtSettings) ;
                 }
@@ -81,4 +93,5 @@ namespace UniversityApiBackend.Controllers
             return Ok(Logins);
         }
     }
+
 }
