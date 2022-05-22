@@ -1,4 +1,6 @@
-﻿#nullable disable
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+#nullable disable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +19,12 @@ namespace UniversityApiBackend.Controllers
     {
         private readonly UniversityDBContext _context;
 
-        public UsersController(UniversityDBContext context)
+        private readonly ILogger<UsersController> _logger;
+
+        public UsersController(UniversityDBContext context, ILogger<UsersController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Users
@@ -31,8 +36,16 @@ namespace UniversityApiBackend.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
+            _logger.LogTrace($"{nameof(UsersController)} - {nameof(GetUser)} - Trace Level Log");
+            _logger.LogDebug($"{nameof(UsersController)} - {nameof(GetUser)} - Debug Level Log ");
+            _logger.LogWarning($"{nameof(UsersController)} - {nameof(GetUser)} - Warning Level Log");
+            _logger.LogError($"{nameof(UsersController)} - {nameof(GetUser)} - Error Level Log");
+            _logger.LogCritical($"{nameof(UsersController)} - {nameof(GetUser)} - Critical Level Log");
+
+
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)

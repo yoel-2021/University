@@ -4,8 +4,19 @@ using Microsoft.OpenApi.Models;
 using UniversityApiBackend;
 using UniversityApiBackend.DataAccess;
 using UniversityApiBackend.Services;
+//10. Using serilog to events
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//11. config serilog
+builder.Host.UseSerilog((hostBuilderCtx, loggerConf) =>
+{
+    loggerConf
+    .WriteTo.Console()
+    .WriteTo.Debug()
+    .ReadFrom.Configuration(hostBuilderCtx.Configuration);
+});
 
 //1.Internalization /LOCALIZATION 
 builder.Services.AddLocalization(options => options.ResourcesPath = "ResourcesUniversity");
@@ -104,6 +115,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//12. Tell app to use Serilog
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

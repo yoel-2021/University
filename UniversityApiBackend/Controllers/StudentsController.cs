@@ -1,4 +1,6 @@
-﻿#nullable disable
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+#nullable disable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +22,13 @@ namespace UniversityApiBackend.Controllers
         // Service
         private readonly IStudentsService _studentsService;
 
-        public StudentsController(UniversityDBContext context, IStudentsService studentsService)
+        private readonly ILogger<StudentsController> _logger;
+
+        public StudentsController(UniversityDBContext context, IStudentsService studentsService, ILogger<StudentsController> logger)
         {
             _context = context;
             _studentsService = studentsService;
+            _logger = logger;
         }
 
         // GET: api/Students
@@ -35,8 +40,16 @@ namespace UniversityApiBackend.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         public async Task<ActionResult<Student>> GetStudent(int id)
         {
+            _logger.LogTrace($"{nameof(StudentsController)} - {nameof(GetStudent)} - Trace Level Log");
+            _logger.LogDebug($"{nameof(StudentsController)} - {nameof(GetStudent)} - Debug Level Log ");
+            _logger.LogWarning($"{nameof(StudentsController)} - {nameof(GetStudent)} - Warning Level Log");
+            _logger.LogError($"{nameof(StudentsController)} - {nameof(GetStudent)} - Error Level Log");
+            _logger.LogCritical($"{nameof(StudentsController)} - {nameof(GetStudent)} - Critical Level Log");
+
+
             var student = await _context.Students.FindAsync(id);
 
 

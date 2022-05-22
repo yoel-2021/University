@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +19,11 @@ namespace UniversityApiBackend.Controllers
     {
         private readonly UniversityDBContext _context;
 
-        public ChaptersController(UniversityDBContext context)
+        private readonly ILogger<ChaptersController> _logger;
+        public ChaptersController(UniversityDBContext context, ILogger<ChaptersController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Chapters
@@ -31,8 +35,15 @@ namespace UniversityApiBackend.Controllers
 
         // GET: api/Chapters/5
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         public async Task<ActionResult<Chapter>> GetChapter(int id)
         {
+            _logger.LogTrace($"{nameof(ChaptersController)} - {nameof(GetChapter)} - Trace Level Log");
+            _logger.LogDebug($"{nameof(ChaptersController)} - {nameof(GetChapter)} - Debug Level Log ");
+            _logger.LogWarning($"{nameof(ChaptersController)} - {nameof(GetChapter)} - Warning Level Log");
+            _logger.LogError($"{nameof(ChaptersController)} - {nameof(GetChapter)} - Error Level Log");
+            _logger.LogCritical($"{nameof(ChaptersController)} - {nameof(GetChapter)} - Critical Level Log");
+
             var chapter = await _context.Chapters.FindAsync(id);
 
             if (chapter == null)

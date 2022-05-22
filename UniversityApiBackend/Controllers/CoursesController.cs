@@ -1,4 +1,6 @@
-﻿#nullable disable
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+#nullable disable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +22,13 @@ namespace UniversityApiBackend.Controllers
         // Service
         private readonly ICoursesService _coursesService;
 
-        public CoursesController(UniversityDBContext context, ICoursesService coursesService)
+        private readonly ILogger<CoursesController> _logger;
+
+        public CoursesController(UniversityDBContext context, ICoursesService coursesService, ILogger<CoursesController> logger)
         {
             _context = context;
             _coursesService = coursesService;
+            _logger = logger;
         }
 
         // GET: api/Courses
@@ -35,8 +40,17 @@ namespace UniversityApiBackend.Controllers
 
         // GET: api/Courses/5
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         public async Task<ActionResult<Course>> GetCourse(int id)
         {
+            _logger.LogTrace($"{nameof(CoursesController)} - {nameof(GetCourse)} - Trace Level Log");
+            _logger.LogDebug($"{nameof(CoursesController)} - {nameof(GetCourse)} - Debug Level Log ");
+            _logger.LogWarning($"{nameof(CoursesController)} - {nameof(GetCourse)} - Warning Level Log");
+            _logger.LogError($"{nameof(CoursesController)} - {nameof(GetCourse)} - Error Level Log");
+            _logger.LogCritical($"{nameof(CoursesController)} - {nameof(GetCourse)} - Critical Level Log");
+
+
+
             var course = await _context.Courses.FindAsync(id);
 
             if (course == null)

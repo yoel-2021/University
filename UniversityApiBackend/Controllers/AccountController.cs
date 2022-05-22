@@ -13,12 +13,13 @@ namespace UniversityApiBackend.Controllers
     public class AccountController : ControllerBase
     {
         private readonly JwtSettings _jwtSettings;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(UniversityDBContext context, JwtSettings jwtSettings)
+        public AccountController(UniversityDBContext context, JwtSettings jwtSettings, ILogger<AccountController> logger)
         {
             _context = context;
             _jwtSettings = jwtSettings;
-
+            _logger = logger;
         }
 
         //
@@ -90,6 +91,12 @@ namespace UniversityApiBackend.Controllers
         [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme, Roles ="Administrator")]
         public IActionResult GetUserList()
         {
+            _logger.LogTrace($"{nameof(AccountController)} - {nameof(GetUserList)} - Trace Level Log");
+            _logger.LogDebug($"{nameof(AccountController)} - {nameof(GetUserList)} - Debug Level Log ");
+            _logger.LogWarning($"{nameof(AccountController)} - {nameof(GetUserList)} - Warning Level Log");
+            _logger.LogError($"{nameof(AccountController)} - {nameof(GetUserList)} - Error Level Log");
+            _logger.LogCritical($"{nameof(AccountController)} - {nameof(GetUserList)} - Critical Level Log");
+
             return Ok(Logins);
         }
     }
