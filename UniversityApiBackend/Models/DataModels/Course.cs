@@ -14,6 +14,14 @@ namespace UniversityApiBackend.Models.DataModels
         Expert
 
     }
+
+    public enum Requirements
+    {
+        BeAtLeast18,
+        HaveHighSchool,
+        HardWorking
+
+    }
     public class Course: BaseEntity
     {
         [Required,StringLength(100)]
@@ -25,6 +33,9 @@ namespace UniversityApiBackend.Models.DataModels
         [Required]
         public string description { get; set; } = string.Empty;
 
+        public string objectivePublic { get; set; }= string.Empty;
+        public string objetives { get; set; } = string.Empty;
+        public Requirements requirements { get; set; } = Requirements.BeAtLeast18;
         public Level Level { get; set; } = Level.Basic;
 
         [Required]
