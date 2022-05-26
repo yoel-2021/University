@@ -28,13 +28,14 @@ namespace UniversityApiBackend.Models.DataModels
         public string name { get; set; } = string.Empty;
         
         [Required,StringLength(200)]
-        public string Shortdescription { get; set; } = string.Empty;
+        public string shortdescription { get; set; } = string.Empty;
 
         [Required]
         public string description { get; set; } = string.Empty;
 
         public string objectivePublic { get; set; }= string.Empty;
         public string objetives { get; set; } = string.Empty;
+        [Required]
         public Requirements requirements { get; set; } = Requirements.BeAtLeast18;
         public Level Level { get; set; } = Level.Basic;
 
